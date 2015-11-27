@@ -1,0 +1,22 @@
+* {
+	box-sizing: border-box;
+}
+
+html, 
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	position: relative;
+}
+
+#canvas {
+	display: block;
+	background: #222;
+	position: absolute;
+	top: 50%;
+	margin-top: -300px;
+	left: 50%;
+	margin-left: -500px;
+}
