@@ -20,3 +20,8 @@ body {
 	left: 50%;
 	margin-left: -500px;
 }
+
+@font-face {
+    font-family: 'hyperspace';
+    src: url('../res/hyperspace.otf');
+}

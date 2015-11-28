@@ -3,9 +3,10 @@ function Point(x, y)
   this.x = x || 0;
   this.y = y || 0;
 
-  this.set = function(x, y) { this.x = x || 0; this.y = y || 0; };
-  this.add = function(p) { this.x += p.x; this.y += p.y; };
-  this.multiply = function(s) { this.x *= s; this.y *= s; };
+  this.clone = function() { return new Point(this.x, this.y); };
+  this.set = function(x, y) { this.x = x || 0; this.y = y || 0; return this; };
+  this.add = function(p) { this.x += p.x; this.y += p.y; return this; };
+  this.multiply = function(s) { this.x *= s; this.y *= s; return this; };
   this.modulus = function() { return Math.sqrt(this.x * this.x + this.y * this.y); };
   this.normalize = function(s)
                    {

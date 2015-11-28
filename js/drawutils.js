@@ -1,18 +1,21 @@
 function drawShape(ctx, model)
 {
-  ctx.strokeStyle = model.color;
-  ctx.beginPath();
-
-  var vertices = model.vertices;
-  for (var i = 0; i < vertices.length; i++)
+  if(model.visible)
   {
-    for (var j = 0; j < vertices[i].length; j++)
+    ctx.strokeStyle = model.color;
+    ctx.beginPath();
+
+    var vertices = model.vertices;
+    for (var i = 0; i < vertices.length; i++)
     {
-      line(ctx, vertices[i][j], model.position, model.r, j == 0);
+      for (var j = 0; j < vertices[i].length; j++)
+      {
+        line(ctx, vertices[i][j], model.position, model.r, j == 0);
+      }
     }
+    ctx.closePath();
+    ctx.stroke();
   }
-  ctx.closePath();
-  ctx.stroke();
 }
 
 function line(ctx, vertex, p, r, move)
@@ -24,4 +27,13 @@ function line(ctx, vertex, p, r, move)
     ctx.moveTo(vertex.x, vertex.y);
   else
     ctx.lineTo(vertex.x, vertex.y);
+}
+
+function renderText(string, position, size, color)
+{
+  ctx.font = size + 'px hyperspace';
+  ctx.fillStyle = color || 'white';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'left';
+  ctx.fillText(string, position.x, position.y);
 }
