@@ -15,14 +15,17 @@ function Point(x, y)
                      {
                        this.multiply((s || 1) / mod);
                      }
+                     return this;
                    };
+  this.rotate = function(r)
+                {
+                  var sin = Math.sin(r);
+                  var cos = Math.cos(r);
+                  var x = this.x;
+                  var y = this.y;
+                  this.x = x * cos - y * sin;
+                  this.y = x * sin + y * cos;
+                  return this;
+                };
   this.toString = function() { return "(" + this.x + ", " + this.y + ")"; };
-}
-
-function rotate(p, r)
-{
-  sin = Math.sin(r);
-  cos = Math.cos(r);
-  return new Point(p.x * cos - p.y * sin,
-                   p.x * sin + p.y * cos);
 }

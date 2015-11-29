@@ -8,8 +8,9 @@ function Menu(callback)
 {
   this.callback = callback;
 
-  this.update = nameInputScreenUpdate;
-  this.render = nameInputScreenRender;
+  this.init = function() {};
+  this.update = function() { nameInputScreenUpdate(this); };
+  this.render = function() { nameInputScreenRender(this); };
 }
 
 function nameInputScreenUpdate(screen)
@@ -23,7 +24,7 @@ function nameInputScreenUpdate(screen)
   }
 
   // TODO: The text input system needs work
-  if (nameString.length < 8)
+  if (nameString.length < 3)
   {
     for(var i = 0; i < keys.length; i++)
     {

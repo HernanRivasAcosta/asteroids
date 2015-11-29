@@ -21,7 +21,7 @@ function drawShape(ctx, model)
 function line(ctx, vertex, p, r, move)
 {
   // Translate and rotate the point
-  vertex = rotate(vertex, r);
+  vertex = vertex.clone().rotate(r);
   vertex.add(p);
   if (move)
     ctx.moveTo(vertex.x, vertex.y);
