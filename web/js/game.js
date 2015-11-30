@@ -16,18 +16,19 @@ function Game(name)
   this.update = game_update;
   this.render = game_render;
 
+  this.localPlayer = null;
   this.remotePlayers = new Object();
 
   this.onShoot = function(x, y, r)
                  {
-                   msg = {action: "shoot",
-                          position: {x: x, y: y, r: r}};
+                   var msg = {action: "shoot",
+                              position: {x: x, y: y, r: r}};
                    this.net.send(msg);
                  };
   this.onInputChange = function(up, left, right)
                        {
-                         msg = {action: "input",
-                                position: {x: x, y: y, r: r}};
+                         var msg = {action: "input",
+                                    position: {x: x, y: y, r: r}};
                          this.net.send(msg);
                        };
 
@@ -61,7 +62,8 @@ function game_init()
 //==============================================================================
 function game_onJoin(x, y, r, players)
 {
-  this.addChild(new PlayerShip(this, this.name, true, x, y));
+  this.localPlayer = new PlayerShip(this, this.name, true, x, y);
+  this.addChild(this.localPlayer);
 
   var l = players.length;
   for(var i = 0; i < l; i++)
@@ -113,6 +115,16 @@ function game_handleEvent(e)
       b.init();
       this.addChild(b);
       break;
+    case "hack":
+      var remoteShip = this.remotePlayers[e.name];
+      if(remoteShip)
+      {
+        remoteShip.model.position.x = e.position.x;
+        remoteShip.model.position.y = e.position.y;
+        remoteShip.model.r = e.position.r;
+        remoteShip.accelerating = e.accelerating;
+      }
+      break;
     default:
       console.log("unexpected event of type " + e.type);
       break;
@@ -126,6 +138,17 @@ function game_update()
 {
   // Notify the network module
   this.net.onLocalTick();
+
+  // Small hack to upate the positions of the ships
+  if(this.localPlayer)
+  {
+    var msg = {action: "hack",
+               accelerating: this.localPlayer.accelerating,
+               position: {x: this.localPlayer.model.position.x,
+                          y: this.localPlayer.model.position.y,
+                          r: this.localPlayer.model.r}};
+    this.net.send(msg);
+  }
 
   // Update all the children (and remove the ones that were flagged)
   var l = this.children.length;

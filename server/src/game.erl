@@ -119,6 +119,13 @@ handle_player_input(Connection, Data, State = #state{events = Events,
       {Position} = proplists:get_value(<<"position">>, Data),
       NewEvent = {bullet, Tick, Position},
       {reply, ok, State#state{events = [NewEvent | Events]}};
+    <<"hack">> ->
+      Tick = proplists:get_value(<<"tick">>, Data),
+      {Position} = proplists:get_value(<<"position">>, Data),
+      Accelerating = proplists:get_value(<<"accelerating">>, Data),
+      {Name, _, _} = get_player(Connection, Players),
+      NewEvent = {hack, Tick, Position, Accelerating, Name},
+      {reply, ok, State#state{events = [NewEvent | Events]}};
     _ ->
       {Name, _, _} = get_player(Connection, Players),
       _ = lager:warn("unexpected event ~p from ~p", [Data, Name]),
@@ -219,12 +226,22 @@ build_events(Events) ->
   build_events(Events, []).
 build_events([], Acc) ->
   Acc;
-build_events([{bullet, Tick, Position} | T], Acc) ->
+build_events([{bullet = Type, Tick, Position} | T], Acc) ->
   X = proplists:get_value(<<"x">>, Position),
   Y = proplists:get_value(<<"y">>, Position),
   R = proplists:get_value(<<"r">>, Position),
-  NewEvent = {[{type, bullet},
+  NewEvent = {[{type, Type},
                {tick, Tick},
+               {position, {[{x, X}, {y, Y}, {r, R}]}}]},
+  build_events(T, [NewEvent | Acc]);
+build_events([{hack = Type, Tick, Position, Accelerating, Name} | T], Acc) ->
+  X = proplists:get_value(<<"x">>, Position),
+  Y = proplists:get_value(<<"y">>, Position),
+  R = proplists:get_value(<<"r">>, Position),
+  NewEvent = {[{type, Type},
+               {tick, Tick},
+               {name, Name},
+               {accelerating, Accelerating},
                {position, {[{x, X}, {y, Y}, {r, R}]}}]},
   build_events(T, [NewEvent | Acc]).
 

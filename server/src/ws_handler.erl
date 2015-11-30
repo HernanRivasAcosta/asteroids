@@ -17,7 +17,7 @@ websocket_handle({text, Json}, Req, State) ->
   % Get the local time of the player (used to calculate ping clientside)
   {value, {_, Time}, NewEvent} = lists:keytake(<<"time">>, 1, Event),
   % Handle the input
-  ok = game:player_input(self, NewEvent),
+  ok = game:player_input(self(), NewEvent),
   % The reply only has the client time
   {reply, {text, jiffy:encode({[{action, reply},
                                 {time, Time}]})}, Req, State}.

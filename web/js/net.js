@@ -22,7 +22,8 @@ function net_send(data)
   // Prepare the current tick
   data.tick = this.tick;
   // Send the data
-  this.socket.send(JSON.stringify(data));
+  var dataStr = JSON.stringify(data);
+  this.socket.send(dataStr);
 }
 
 function net_connect(game)

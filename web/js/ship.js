@@ -1,15 +1,19 @@
-function PlayerShip(game, name, userControlled, x, y)
+function PlayerShip(game, name, local, x, y)
 {
   this.game = game;
   this.name = name;
   this.model = new Model(shipModelA, x, y, 0, 'white');
   this.speed = new Point();
-  this.maxSpeed = 8;
-  this.acceleration = .3;
+  this.maxSpeed = 5.5;
+  this.acceleration = .2;
   this.deceleration = .05;
   this.rotationSpeed = .1;
 
-  if(userControlled)
+  // Hack
+  this.accelerating = false;
+
+  // Different updates for local and remote ships
+  if(local)
     this.update = ship_localUpdate;
   else
     this.update = ship_remoteUpdate;
@@ -28,10 +32,12 @@ function ship_localUpdate()
 {
   if(keyIsDown(KEY_UP))
   {
+    this.accelerating = true;
     ship_accelerate.apply(this);
   }
   else
   {
+    this.accelerating = false;
     ship_decelerate.apply(this);
   }
 
@@ -56,6 +62,10 @@ function ship_localUpdate()
 
 function ship_remoteUpdate()
 {
+  if(this.accelerating)
+    this.model.vertices = shipModelB;
+  else
+    this.model.vertices = shipModelA;
 }
 
 //==============================================================================
