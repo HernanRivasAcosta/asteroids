@@ -1,1 +1,4 @@
 .DS_Store
+_rel/
+.erlang.mk/
+deps/
