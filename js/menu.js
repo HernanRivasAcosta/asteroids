@@ -1,53 +1,47 @@
-var nameString = "";
-var hostString = "";
-var underscore = "_";
-
-var frame = 0;
-
 function Menu(callback)
 {
   this.callback = callback;
+  this.nameString = "";
+  this.underscore = "_";
+  this.frame = 0;
 
   this.init = function() {};
-  this.update = function() { nameInputScreenUpdate(this); };
-  this.render = function() { nameInputScreenRender(this); };
+  this.update = menu_nameInputScreenUpdate;
+  this.render = menu_nameInputScreenRender;
 }
 
-function nameInputScreenUpdate(screen)
+function menu_nameInputScreenUpdate()
 {
   var keys = allNewKeys();
 
   // Makes the cursor blink
-  if(++frame % 30 == 0)
+  if(++this.frame % 30 == 0)
   {
-    underscore = underscore == '' ? '_' : '';
+    this.underscore = this.underscore == '' ? '_' : '';
   }
 
   // TODO: The text input system needs work
-  if (nameString.length < 3)
+  if (this.nameString.length < 3)
   {
     for(var i = 0; i < keys.length; i++)
     {
       if(keys[i] >= 65 && keys[i] <= 90)
       {
-        nameString += String.fromCharCode(keys[i]);
+        this.nameString += String.fromCharCode(keys[i]);
       }
     }
   }
   if(keyWasJustPressed(KEY_BACKSPACE))
   {
-    nameString = nameString.substring(0, nameString.length - 1);
+    this.nameString = this.nameString.substring(0, this.nameString.length - 1);
   }
 
-  // Go to the host pick screen
   if(keyWasJustPressed(KEY_ENTER))
   {
-    //this.update = hostInputScreenUpdate;
-    //this.render = hostInputScreenRender;
-    screen.callback(nameString);
+    this.callback(this.nameString);
   }
 }
-function nameInputScreenRender(screen)
+function menu_nameInputScreenRender()
 {
-  renderText('name: ' + nameString + underscore, new Point(20, hh), 20);
+  renderText('name: ' + this.nameString + this.underscore, new Point(20, hh), 20);
 }

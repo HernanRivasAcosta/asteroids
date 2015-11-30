@@ -2,7 +2,7 @@
 // Screens
 //==============================================================================
 var menu = new Menu(onMenuDone);
-menu.init();
+menu.init.apply(menu);
 
 var game;
 var currentScreen = menu;
@@ -12,8 +12,8 @@ var currentScreen = menu;
 //==============================================================================
 function onMenuDone(name, ip)
 {
-  game = new Game(name, ip);
-  game.init();
+  game = new Game(name);
+  game.init.apply(game);
   currentScreen = game;
 }
 
@@ -24,7 +24,7 @@ function update()
 {
   if(currentScreen)
   {
-    currentScreen.update();
+    currentScreen.update.apply(currentScreen);
   }
 
   // Has to be done at the end if we want to use keyWasJustPressed
@@ -36,7 +36,7 @@ function render()
   if(currentScreen)
   {
     ctx.clearRect(0, 0, w, h);
-    currentScreen.render();
+    currentScreen.render.apply(currentScreen);
   }
   requestAnimationFrame(render);
 };
@@ -45,4 +45,4 @@ function render()
 // Start point
 //==============================================================================
 render();
-window.setInterval(update, 1000 / 30); // 30fps
+window.setInterval(update, 1000 / 40); // 40fps
