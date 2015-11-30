@@ -1,0 +1,15 @@
+{application, asteroids, [
+  {description, "Asteroids online"},
+  {vsn, "1"},
+  {modules, []},
+  {registered, [asteroids_sup]},
+  {applications, [
+    lager,
+    kernel,
+    stdlib,
+    cowboy,
+    jiffy
+  ]},
+  {mod, {asteroids_app, []}},
+  {env, []}
+]}.
